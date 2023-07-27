@@ -1,0 +1,76 @@
+body {
+    background: #000000;
+    color: #FFFFFF;
+    font-family: 'Raleway', sans-serif;
+    overflow: hidden;
+}
+
+.container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+    z-index: 2;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+    text-shadow: 0 0 5px #0F0;
+    animation: codedAnimation 5s linear infinite;
+    font-weight: 200;  /* Makes the font thinner */
+}
+
+@keyframes codedAnimation {
+    0% {color: #0F0; text-shadow: 0 0 5px #0F0;}
+    25% {color: #FF0; text-shadow: 0 0 5px #FF0;}
+    50% {color: #F00; text-shadow: 0 0 5px #F00;}
+    75% {color: #0FF; text-shadow: 0 0 5px #0FF;}
+    100% {color: #0F0; text-shadow: 0 0 5px #0F0;}
+}
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+    color: rgb(238, 247, 238);
+    font-family: 'Dancing Script', cursive;  /* Changes the paragraph font */
+}
+
+.cta-button {
+    background: #0d0d0d;
+    color: #FFFFFF;
+    padding: 1em 2em;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background .3s;
+}
+
+.cta-button:hover {
+    background: #1da10e;
+}
+
+#matrixCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#cursor {
+    position: absolute;
+    background: #0F0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: transform 0.1s ease-out;
+    pointer-events: none;
+    transform: scale(1);
+    mix-blend-mode: difference;
+    z-index: 100;
+}
+
+
