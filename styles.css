@@ -1,76 +1,265 @@
-body {
-    background: #000000;
-    color: #FFFFFF;
-    font-family: 'Raleway', sans-serif;
-    overflow: hidden;
+/* Reset Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+/* Body Styles */
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #ffffff;
+  font-family: 'Bebas Neue', sans-serif;
+  cursor: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSJyZ2IoMjU1LDEwNSwxODApIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+CjxwYXRoIGQ9Ik0xMiAyMS42MWMtLjM4IDAtLjc1LS4xMi0xLjA2LS4zNTgtNC43Mi0zLjQxLTguMjgtNi44MS0xMC44NS05LjU1Qy0uMTU1IDguMDMgLTEuMDk5IDUuNTk4IDEuNjQgMy4xMDkgNC40MTIuNjA4IDcuMTE4IDIuMzYyIDggNC42MjhDOC45MjUgMi4zNjIgMTEuNTkgLjYwOCAxNC4zNiAzLjEwOWMyLjc0MyAyLjQ5IDEuNzkgNS45Mi0xLjU4IDguNjYtMi41NyAyLjc1LTYuMTMgNi4xNC0xMC44NSA5LjU1LS4zMi4yNC0uNjkuMzYtMS4wNi4zNloiLz4KPC9zdmc+'), auto;
+}
+
+/* Canvas Styles */
+#animationCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Container Styles */
 .container {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-    text-align: center;
-    z-index: 2;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  width: 80%;
+  max-width: 800px;
 }
 
-h1 {
-    font-size: 2.5em;
-    margin-bottom: 0.5em;
-    text-shadow: 0 0 5px #0F0;
-    animation: codedAnimation 5s linear infinite;
-    font-weight: 200;  /* Makes the font thinner */
+/* Title Section */
+.title-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-@keyframes codedAnimation {
-    0% {color: #0F0; text-shadow: 0 0 5px #0F0;}
-    25% {color: #FF0; text-shadow: 0 0 5px #FF0;}
-    50% {color: #F00; text-shadow: 0 0 5px #F00;}
-    75% {color: #0FF; text-shadow: 0 0 5px #0FF;}
-    100% {color: #0F0; text-shadow: 0 0 5px #0F0;}
+.codedparagon {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: #000000;
+  letter-spacing: 4px;
+  margin: 0 10px;
+  cursor: pointer;
+  position: relative;
 }
 
-p {
-    font-size: 1.2em;
-    margin-bottom: 2em;
-    color: rgb(238, 247, 238);
-    font-family: 'Dancing Script', cursive;  /* Changes the paragraph font */
+.plus {
+  font-size: 80px;
+  color: #000000;
+  margin: 0 10px;
 }
 
-.cta-button {
-    background: #0d0d0d;
-    color: #FFFFFF;
-    padding: 1em 2em;
-    text-decoration: none;
-    border-radius: 50px;
-    transition: background .3s;
+.makethingspretty {
+  font-family: 'Edu VIC WA NT Beginner', cursive;
+  font-weight: 400;
+  font-size: 72px;
+  color: #ff69b4;
+  margin: 0 10px;
+  position: relative;
 }
 
-.cta-button:hover {
-    background: #1da10e;
+/* Client Spotlight Badge */
+.client-spotlight {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #007BFF; /* Bootstrap Primary Blue */
+  color: #ffffff;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-family: 'Arial', sans-serif;
 }
 
-#matrixCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
+/* Hover Menu */
+.hover-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 3;
 }
 
-#cursor {
-    position: absolute;
-    background: #0F0;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    transition: transform 0.1s ease-out;
-    pointer-events: none;
-    transform: scale(1);
-    mix-blend-mode: difference;
-    z-index: 100;
+.hover-menu ul {
+  list-style: none;
 }
 
+.hover-menu li {
+  padding: 10px 20px;
+  position: relative;
+  font-size: 18px;
+}
 
+.hover-menu li:hover::after {
+  content: '✖';
+  color: red;
+  position: absolute;
+  right: 20px;
+  font-size: 18px;
+}
+
+/* Apply hover animation to CodedParagon */
+.codedparagon:hover + .hover-menu,
+.hover-menu:hover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Announcement Text */
+.announcement {
+  font-size: 24px;
+  color: #333333;
+  margin: 40px 0;
+  line-height: 1.5;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Sign Up Button */
+.signup-button {
+  font-size: 18px;
+  padding: 12px 25px;
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.signup-button.inactive {
+  background-color: transparent;
+  color: #ff69b4;
+  border-color: #ff69b4;
+  cursor: default;
+}
+
+.signup-button.inactive:hover {
+  background-color: transparent;
+  color: #ff69b4;
+}
+
+/* Inquiry Sticker */
+.inquiry-sticker {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 3;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 16px;
+  text-decoration: none;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.inquiry-sticker:hover {
+  transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 4;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-container {
+  position: relative;
+  width: 400px; /* Increased width */
+  height: 360px; /* Increased height */
+}
+
+.modal-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #ffffff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.modal-heart {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-content {
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  font-size: 24px; /* Increased font size */
+}
+
+.modal-content input {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  background-color: #ff69b4;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 320px;
+    height: 288px;
+  }
+  .modal-content h2 {
+    font-size: 20px;
+  }
+  .modal-content input {
+    width: 95%;
+  }
+}
