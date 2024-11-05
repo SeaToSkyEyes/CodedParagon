@@ -67,9 +67,9 @@ function handleParticles() {
       particlesArray.push(
         new HeartParticle(
           Math.random() * canvas.width,
-          canvas.height + 10, // Start from below the canvas
+          canvas.height + 10,
           Math.random() * 15 + 5,
-          Math.random() * 1 + 0.5 // Random upward speed
+          Math.random() * 1 + 0.5
         )
       );
     }
@@ -79,7 +79,6 @@ function handleParticles() {
     particlesArray[i].update();
     particlesArray[i].draw();
 
-    // Remove particles that are no longer visible
     if (particlesArray[i].opacity <= 0 || particlesArray[i].y + particlesArray[i].size < 0) {
       particlesArray.splice(i, 1);
       i--;
@@ -102,23 +101,19 @@ function resizeCanvas() {
 
 window.addEventListener('resize', resizeCanvas);
 
-// Open modal on button click
 signupButton.addEventListener('click', () => {
   if (!signupButton.classList.contains('inactive')) {
     modalOverlay.style.display = 'flex';
   }
 });
 
-// Close modal
 modalClose.addEventListener('click', () => {
   modalOverlay.style.display = 'none';
 });
 
-// Handle form submission
 signupForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  // Close modal and trigger animations
   modalOverlay.style.display = 'none';
   signupButton.textContent = '<3';
   signupButton.classList.add('inactive');
@@ -127,13 +122,9 @@ signupForm.addEventListener('submit', (e) => {
     spasticMode = false;
   }, 2000);
 
-  // Clear form fields
   signupForm.reset();
-
-  // Form submission functionality can be added later
 });
 
-// Hover animation over CodedParagon
 const codedParagon = document.querySelector('.codedparagon');
 const hoverMenu = document.querySelector('.hover-menu');
 
