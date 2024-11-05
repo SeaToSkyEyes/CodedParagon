@@ -198,8 +198,8 @@ body, html {
 
 .modal-container {
   position: relative;
-  width: 400px; /* Increased width */
-  height: 360px; /* Increased height */
+  width: 400px;
+  height: 360px;
 }
 
 .modal-close {
@@ -226,7 +226,7 @@ body, html {
 
 .modal-content h2 {
   margin-bottom: 15px;
-  font-size: 24px; /* Increased font size */
+  font-size: 24px;
 }
 
 .modal-content input {
@@ -252,14 +252,44 @@ body, html {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .container {
+    top: 20%;
+    width: 90%;
+    transform: translate(-50%, -10%);
+  }
+
+  .codedparagon {
+    font-size: 40px;
+  }
+
+  .makethingspretty {
+    font-size: 36px;
+  }
+
+  .plus {
+    font-size: 40px;
+  }
+
+  .client-spotlight {
+    font-size: 12px;
+  }
+
+  .signup-button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
   .modal-container {
-    width: 320px;
-    height: 288px;
+    width: 280px;
+    height: auto;
   }
+
   .modal-content h2 {
-    font-size: 20px;
+    font-size: 18px;
   }
-  .modal-content input {
-    width: 95%;
+
+  .modal-close {
+    top: -5px;
+    right: -5px;
   }
 }
