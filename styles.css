@@ -250,46 +250,56 @@ body, html {
   align-items: center;
 }
 
-/* Responsive Design */
+/* Responsive Design for Mobile Screens */
 @media (max-width: 768px) {
   .container {
-    top: 20%;
-    width: 90%;
-    transform: translate(-50%, -10%);
+    top: 5%;
+    width: 95%;
   }
 
   .codedparagon {
-    font-size: 40px;
+    font-size: 10vw; /* Adjusted for mobile */
   }
 
   .makethingspretty {
-    font-size: 36px;
+    font-size: 9vw; /* Adjusted for mobile */
   }
 
   .plus {
-    font-size: 40px;
+    font-size: 10vw; /* Adjusted for mobile */
   }
 
   .client-spotlight {
-    font-size: 12px;
+    font-size: 12px; /* Reduce font size */
   }
 
   .signup-button {
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 16px; /* Reduce font size */
   }
 
   .modal-container {
-    width: 280px;
-    height: auto;
+    width: 280px; /* Adjusted width */
+    height: auto; /* Flexible height */
   }
 
   .modal-content h2 {
-    font-size: 18px;
+    font-size: 18px; /* Smaller headline text */
   }
 
   .modal-close {
     top: -5px;
     right: -5px;
   }
+
+  .title-section {
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+
+  .codedparagon,
+  .makethingspretty,
+  .plus {
+    margin: 0 5px; /* Reduce margin for better fit */
+  }
 }
+
