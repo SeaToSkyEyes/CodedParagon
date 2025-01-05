@@ -1,69 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CodedParagon + makethingspretty&lt;3</title>
-  <!-- Import Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Edu+VIC+WA+NT+Beginner:wght@400&display=swap" rel="stylesheet">
-  <!-- Responsive Meta Tag -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- External CSS -->
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Futuristic Celebration Demo + Subtle Confetti</title>
+  <style>
+    /* --- ESSENTIAL BASE STYLES --- */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #111;
+      overflow: hidden;
+      position: relative;
+    }
+    body {
+      animation: fadeIn 1s ease forwards;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* --- STARFIELD + CONFETTI CANVAS --- */
+    canvas#backgroundCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -999;
+    }
+
+    /* --- GLASS OVERLAY BEHIND DIGITS --- */
+    .glass-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      backdrop-filter: blur(4px) brightness(0.85);
+      pointer-events: none;
+      z-index: -10;
+    }
+
+    /* --- MAIN CONTAINER WITH BORDER SHIMMER --- */
+    .container {
+      perspective: 800px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      z-index: 1;
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #f0f, #0ff);
+      border-image-slice: 1;
+      border-radius: 20px;
+      padding: 2rem;
+      animation: containerShimmer 8s linear infinite;
+    }
+    @keyframes containerShimmer {
+      0% {
+        border-image: linear-gradient(45deg, #f0f, #0ff);
+      }
+      50% {
+        border-image: linear-gradient(45deg, #a0f, #0af);
+      }
+      100% {
+        border-image: linear-gradient(45deg, #f0f, #0ff);
+      }
+    }
+
+    /* Subtle scan lines & diagonal stripes behind the container */
+    .container::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          rgba(255,255,255,0.03) 0px,
+          rgba(255,255,255,0.03) 1px,
+          transparent 1px,
+          transparent 2px
+        ),
+        repeating-linear-gradient(
+          to bottom right,
+          rgba(255,255,255,0.02) 0,
+          rgba(255,255,255,0.02) 2px,
+          transparent 2px,
+          transparent 4px
+        );
+      pointer-events: none;
+      z-index: -1;
+      border-radius: 20px;
+    }
+
+    /* --- DIGITS --- */
+    .text {
+      display: flex;
+      font-size: 6rem;
+      font-weight: bold;
+      font-family: 'Arial', sans-serif;
+      color: #fff;
+      position: relative;
+      transform: translateZ(0);
+    }
+    .text .digit {
+      position: relative;
+      margin: 0 0.3rem;
+      cursor: pointer;
+      text-shadow:
+        0 0 8px rgba(255,255,255,0.4),
+        0 0 14px rgba(255,255,255,0.3);
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      animation: floatDigits 4s ease-in-out infinite alternate;
+    }
+    @keyframes floatDigits {
+      0%   { transform: translateY(0) translateX(0) scale(1); }
+      50%  { transform: translateY(-12px) translateX(-4px) scale(1.03); }
+      100% { transform: translateY(-20px) translateX(4px) scale(1.05); }
+    }
+    .text .digit:hover {
+      transform: rotateX(10deg) rotateY(-5deg) scale(1.18);
+    }
+
+    /* --- LARGER, PROMINENT SQUARES --- */
+    .digit span {
+      display: block;
+      width: 1.3em;
+      height: 1.6em;
+      border: 6px solid #fff;
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      overflow: hidden;
+      animation:
+        shimmer 2s infinite ease-in-out,
+        colorShift 6s infinite linear,
+        glimmer 6s infinite linear,
+        flickerGlitch 1.5s infinite steps(6, start) alternate;
+    }
+    @keyframes shimmer {
+      0%   { transform: scale(1);   opacity: 1; }
+      50%  { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    @keyframes colorShift {
+      0%   { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    @keyframes glimmer {
+      0%   { box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+      50%  { box-shadow: 0 0 25px rgba(255,255,255,0.7); }
+      100% { box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+    }
+    @keyframes flickerGlitch {
+      0%   { filter: brightness(0.8) contrast(1); }
+      20%  { filter: brightness(0.4) contrast(2) saturate(1.8); }
+      40%  { filter: brightness(1)   contrast(1.2); }
+      60%  { filter: brightness(1.3) hue-rotate(20deg); }
+      80%  { filter: brightness(0.6) contrast(0.8) saturate(0.8); }
+      100% { filter: brightness(0.8) contrast(1); }
+    }
+    .digit span::before {
+      content: "";
+      position: absolute;
+      top: -6px; left: -6px; right: -6px; bottom: -6px;
+      border: 3px dashed #fff;
+      border-radius: 12px;
+      animation: rotateBorder 4s linear infinite;
+      opacity: 0.25;
+    }
+    @keyframes rotateBorder {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* --- Pulsing ring around digit --- */
+    .digit::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0px; height: 0px;
+      border: 60px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      animation: pulseRing 3s infinite ease-in-out;
+      pointer-events: none;
+      z-index: -1;
+    }
+    @keyframes pulseRing {
+      0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0.5; }
+      50%  { transform: translate(-50%, -50%) scale(1);   opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.5; }
+    }
+
+    /* Click ring expansion when pressed */
+    .digit:active::before {
+      animation: none;
+    }
+    .digit:active::after {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #fff;
+      transform: translate(-50%, -50%) scale(0);
+      animation: clickRing 0.6s ease-out forwards;
+    }
+    @keyframes clickRing {
+      to {
+        transform: translate(-50%, -50%) scale(8);
+        opacity: 0;
+      }
+    }
+
+    /* Unique border colors per digit */
+    :root {
+      --c1: #3369E8;
+      --c2: #34A853;
+      --c3: #FBBC04;
+      --c4: #EA4335;
+      --c5: #7E7E7E;
+      --c6: #FF4081;
+    }
+    .digit:nth-child(1) span { border-color: var(--c1); animation-delay: 0s;   }
+    .digit:nth-child(2) span { border-color: var(--c2); animation-delay: 0.2s;}
+    .digit:nth-child(3) span { border-color: var(--c3); animation-delay: 0.4s;}
+    .digit:nth-child(4) span { border-color: var(--c4); animation-delay: 0.6s;}
+    .digit:nth-child(5) span { border-color: var(--c5); animation-delay: 0.8s;}
+    .digit:nth-child(6) span { border-color: var(--c6); animation-delay: 1s;  }
+
+    /* --- SIMPLIFIED SUBTEXT --- */
+    .subtext {
+      margin-top: 1rem;
+      font-size: 1.4rem;
+      font-family: 'Arial', sans-serif;
+      color: #fff;
+      text-align: center;
+      max-width: 80%;
+      line-height: 1.4;
+      opacity: 0;
+      animation: subtextFadeIn 1.5s forwards ease;
+      /* Subtle gradient fill & drop shadow for a refined look */
+      background: linear-gradient(90deg, #bbb, #fff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    }
+    @keyframes subtextFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0);   }
+    }
+  </style>
 </head>
 <body>
-  <!-- Background Animation Canvas -->
-  <canvas id="animationCanvas"></canvas>
+  <!-- Starfield + Confetti Canvas -->
+  <canvas id="backgroundCanvas"></canvas>
 
-  <!-- Main Content -->
+  <!-- Glass overlay -->
+  <div class="glass-overlay"></div>
+
+  <!-- Some background items (sphere, lens flare, warp, cubes) for flavor -->
+  <div class="wireframe-sphere" style="
+    position:absolute;
+    width:180px; height:180px;
+    top:5%; right:5%;
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:50%;
+    animation:rotateSphere 12s linear infinite;
+    z-index:1;">
+  </div>
+  <style>
+    @keyframes rotateSphere {
+      0%   { transform: rotateX(0deg) rotateY(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+  </style>
+
+  <div class="cube top-left" style="
+    position:absolute;
+    width:40px; height:40px;
+    border:2px solid rgba(255,255,255,0.3);
+    transform-style: preserve-3d;
+    animation: spinCube 8s linear infinite;
+    top:10%; left:5%;
+    z-index:2;">
+  </div>
+  <div class="cube bottom-left" style="
+    position:absolute;
+    width:40px; height:40px;
+    border:2px solid rgba(255,255,255,0.3);
+    transform-style: preserve-3d;
+    animation: spinCube 8s linear infinite;
+    bottom:10%; left:5%;
+    z-index:2;">
+  </div>
+  <style>
+    @keyframes spinCube {
+      0%   { transform: rotateX(0deg) rotateY(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+  </style>
+
+  <div class="lens-flare" style="
+    position:absolute;
+    top:50%; left:50%;
+    width:200px; height:200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+    transform: translate(-50%, -50%);
+    animation: lensFlareMove 5s infinite;
+    pointer-events:none;
+    z-index:1;">
+  </div>
+  <style>
+    @keyframes lensFlareMove {
+      0%   { transform: translate(-30%, -50%); }
+      50%  { transform: translate(130%, 50%) scale(1.4); }
+      100% { transform: translate(-30%, -50%); }
+    }
+  </style>
+
+  <div class="space-warp" style="
+    position:absolute;
+    inset:0;
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+    mix-blend-mode: overlay;
+    animation: warp 10s linear infinite;
+    z-index:-5;
+    pointer-events:none;">
+  </div>
+  <style>
+    @keyframes warp {
+      0%   { background-position:0% 0%; }
+      100% { background-position:100% 100%; }
+    }
+    .space-warp::after {
+      content: '';
+      position:absolute;
+      inset:0;
+      background: repeating-linear-gradient(
+        to right,
+        rgba(0,255,255,0.1) 0 2px,
+        transparent 2px 4px
+      );
+      mix-blend-mode: lighten;
+      opacity: 0.04;
+      animation: circuitScroll 10s linear infinite;
+    }
+    @keyframes circuitScroll {
+      0% { background-position:0 0; }
+      100% { background-position:1000px 0; }
+    }
+  </style>
+
+  <!-- MAIN CONTENT (No reflection) -->
   <div class="container">
-    <div class="title-section">
-      <h1 class="codedparagon">CodedParagon</h1>
-      <!-- Hover Menu -->
-      <div class="hover-menu">
-        <ul>
-          <li>Portfolio</li>
-          <li>About Us</li>
-          <li>Our Team</li>
-        </ul>
-      </div>
-      <span class="plus">+</span>
-      <h1 class="makethingspretty">
-        <!-- Client Spotlight Badge -->
-        <span class="client-spotlight">Client Spotlight</span>
-        makethingspretty&lt;3
-      </h1>
+    <!-- Digits -->
+    <div class="text">
+      <div class="digit">1</div>
+      <div class="digit"><span></span></div>
+      <div class="digit"><span></span></div>
+      <div class="digit"><span></span></div>
+      <div class="digit"><span></span></div>
+      <div class="digit"><span></span></div>
     </div>
-    <p class="announcement"><em>We're combining forces to deliver a revolutionary tool for designers.</em></p>
-    <button class="signup-button">OMG!</button>
-  </div>
 
-  <!-- Inquiry Sticker -->
-  <a href="mailto:charles@codedparagon.com?subject=I'm%20interested%20in%20partnering%20with%20CodedParagon" class="inquiry-sticker">
-    Partner With Us
-  </a>
-
-  <!-- Heart-Shaped Modal -->
-  <div class="modal-overlay">
-    <div class="modal-container">
-      <button class="modal-close">&times;</button>
-      <!-- Enlarged Heart SVG -->
-      <svg class="modal-heart" viewBox="0 0 400 360">
-        <path d="M200 340 L40 180 A100 100 0 0 1 200 20 A100 100 0 0 1 360 180 Z" fill="#fff"/>
-        <foreignObject x="70" y="80" width="260" height="200">
-          <div class="modal-content">
-            <h2>Stay Updated!</h2>
-            <form id="signup-form">
-              <input type="text" name="user_name" placeholder="Your Name" required>
-              <input type="email" name="user_email" placeholder="Your Email" required>
-              <button type="submit">Submit</button>
-            </form>
-          </div>
-        </foreignObject>
-      </svg>
+    <!-- Clean subtext -->
+    <div class="subtext">
+      (Celebrating 100k QR Scans—Connecting Communities in NYC and Charlotte!)
     </div>
   </div>
 
-  <!-- External JavaScript -->
-  <script src="script.js"></script>
+  <script>
+    /* 
+      1) We have a single canvas (backgroundCanvas) for both the starfield and confetti.
+      2) We'll maintain two arrays: 'stars' and 'confettiPieces'.
+      3) We'll draw them in sequence: fill background -> draw stars -> draw confetti -> requestAnimationFrame.
+    */
+
+    const canvas  = document.getElementById('backgroundCanvas');
+    const ctx     = canvas.getContext('2d');
+
+    let w, h;
+    let stars          = [];
+    let confettiPieces = [];
+
+    /* Starfield Config */
+    const numStars = 100; // fewer for better performance with confetti
+    /* Confetti Config */
+    const numConfetti = 60;
+    const confettiColors = [
+      "#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#B983FF",
+      "#F72585", "#FF9F1C", "#FDFFB6", "#CAFFBF", "#9BF6FF"
+    ];
+
+    function initCanvas() {
+      w = canvas.width  = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          radius: Math.random() * 1.2 + 0.2,
+          alpha: Math.random(),
+          speed: 0.02 + Math.random() * 0.02
+        });
+      }
+    }
+
+    /* Subtle confetti initialization */
+    function initConfetti() {
+      confettiPieces = [];
+      for (let i = 0; i < numConfetti; i++) {
+        const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+        confettiPieces.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          size: 5 + Math.random() * 8,         // size of confetti
+          color: color,
+          angle: Math.random() * 2 * Math.PI,  // rotation
+          speedX: -1 + Math.random() * 2,      // horizontal velocity
+          speedY: 0.5 + Math.random() * 1.5,   // vertical velocity
+          rotationSpeed: -0.02 + (Math.random() * 0.04)
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      // Fill background
+      ctx.fillStyle = "#111";
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw stars
+      stars.forEach(star => {
+        // Twinkle
+        star.alpha += star.speed * (Math.random() > 0.5 ? 1 : -1);
+        if (star.alpha < 0) star.alpha = 0.2;
+        if (star.alpha > 1) star.alpha = 1;
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${star.alpha})`;
+        ctx.fill();
+      });
+
+      // Draw confetti
+      confettiPieces.forEach(cf => {
+        cf.x += cf.speedX;
+        cf.y += cf.speedY;
+        cf.angle += cf.rotationSpeed;
+
+        // Re-spawn confetti if it goes off screen
+        if (cf.x < -50 || cf.x > w + 50 || cf.y > h + 50) {
+          cf.x = Math.random() * w;
+          cf.y = -10;
+        }
+
+        // We'll draw confetti as small rotated squares
+        ctx.save();
+        ctx.translate(cf.x, cf.y);
+        ctx.rotate(cf.angle);
+        ctx.fillStyle = cf.color;
+        ctx.fillRect(-cf.size/2, -cf.size/2, cf.size, cf.size);
+        ctx.restore();
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    // On resize
+    window.addEventListener('resize', () => {
+      initCanvas();
+      initStars();
+      initConfetti();
+    });
+
+    // Initialize
+    initCanvas();
+    initStars();
+    initConfetti();
+    draw();
+  </script>
 </body>
 </html>
