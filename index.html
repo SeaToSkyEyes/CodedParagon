@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <!-- Ensures proper mobile scaling -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Futuristic Celebration Demo + Subtle Confetti</title>
+  <title>A Celebration</title>
   <style>
-    /* --- ESSENTIAL BASE STYLES --- */
+    /* =========== BASE / GLOBAL =========== */
     html, body {
       margin: 0;
       padding: 0;
@@ -22,7 +23,7 @@
       to { opacity: 1; }
     }
 
-    /* --- STARFIELD + CONFETTI CANVAS --- */
+    /* =========== SINGLE CANVAS FOR STARFIELD + CONFETTI =========== */
     canvas#backgroundCanvas {
       position: fixed;
       top: 0;
@@ -32,7 +33,7 @@
       z-index: -999;
     }
 
-    /* --- GLASS OVERLAY BEHIND DIGITS --- */
+    /* =========== GLASS OVERLAY =========== */
     .glass-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -41,7 +42,7 @@
       z-index: -10;
     }
 
-    /* --- MAIN CONTAINER WITH BORDER SHIMMER --- */
+    /* =========== CONTAINER WITH BORDER SHIMMER =========== */
     .container {
       perspective: 800px;
       display: flex;
@@ -56,7 +57,10 @@
       border-image-slice: 1;
       border-radius: 20px;
       padding: 2rem;
+      box-sizing: border-box;
       animation: containerShimmer 8s linear infinite;
+      max-width: 95%;
+      margin: 0 auto;
     }
     @keyframes containerShimmer {
       0% {
@@ -70,7 +74,7 @@
       }
     }
 
-    /* Subtle scan lines & diagonal stripes behind the container */
+    /* Subtle scan lines & diagonal stripes behind container */
     .container::before {
       content: "";
       position: absolute;
@@ -94,7 +98,7 @@
       border-radius: 20px;
     }
 
-    /* --- DIGITS --- */
+    /* =========== DIGITS =========== */
     .text {
       display: flex;
       font-size: 6rem;
@@ -103,8 +107,9 @@
       color: #fff;
       position: relative;
       transform: translateZ(0);
+      flex-wrap: nowrap; /* keep them in a single row */
     }
-    .text .digit {
+    .digit {
       position: relative;
       margin: 0 0.3rem;
       cursor: pointer;
@@ -115,52 +120,92 @@
       animation: floatDigits 4s ease-in-out infinite alternate;
     }
     @keyframes floatDigits {
-      0%   { transform: translateY(0) translateX(0) scale(1); }
+      0%   { transform: translateY(0)   translateX(0)   scale(1); }
       50%  { transform: translateY(-12px) translateX(-4px) scale(1.03); }
-      100% { transform: translateY(-20px) translateX(4px) scale(1.05); }
+      100% { transform: translateY(-20px) translateX(4px)  scale(1.05); }
     }
-    .text .digit:hover {
+    .digit:hover {
       transform: rotateX(10deg) rotateY(-5deg) scale(1.18);
     }
 
-    /* --- LARGER, PROMINENT SQUARES --- */
+    /* 
+       =========== "QR-CODE-like" BACKGROUND + "Flowing" Outline Animations ===========
+       Key changes for "not so bright so fast":
+       - colorShift slowed to 12s
+       - glimmer extended to 8s
+       - shimmer slowed to 2.5s
+       - flickerGlitch has reduced brightness changes 
+    */
     .digit span {
       display: block;
+      position: relative;
+      overflow: hidden;
       width: 1.3em;
       height: 1.6em;
       border: 6px solid #fff;
       border-radius: 10px;
-      position: relative;
-      box-shadow: 0 0 10px rgba(255,255,255,0.3);
-      overflow: hidden;
+
+      /* The QR code-like pattern inside */
+      background-image:
+        linear-gradient(to right, #000 50%, #fff 50%),
+        linear-gradient(to bottom, #000 50%, #fff 50%);
+      background-blend-mode: difference;
+      background-repeat: repeat, repeat;
+      background-size: 6px 6px, 6px 6px;
+
+      /* Animations for the border & inside pattern */
       animation:
-        shimmer 2s infinite ease-in-out,
-        colorShift 6s infinite linear,
-        glimmer 6s infinite linear,
-        flickerGlitch 1.5s infinite steps(6, start) alternate;
+        qrScan 3s linear infinite,   /* the movement of the QR pattern */
+        shimmer 2.5s infinite ease-in-out,
+        colorShift 12s infinite linear,
+        glimmer 8s infinite linear,
+        flickerGlitch 3s infinite steps(8, start) alternate;  /* extended & softened */
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
+
+    /* The QR-code movement */
+    @keyframes qrScan {
+      0%   { background-position: 0px 0px, 0px 0px; }
+      50%  { background-position: 6px 0px, 6px 0px; }
+      100% { background-position: 0px 0px, 0px 0px; }
+    }
+
+    /* 1) Shimmer (slightly slower 2.5s) */
     @keyframes shimmer {
       0%   { transform: scale(1);   opacity: 1; }
-      50%  { transform: scale(1.1); opacity: 0.8; }
+      50%  { transform: scale(1.08); opacity: 0.9; }
       100% { transform: scale(1);   opacity: 1; }
     }
+
+    /* 2) colorShift slowed to 12s for gentler hue-rotation */
     @keyframes colorShift {
       0%   { filter: hue-rotate(0deg); }
       100% { filter: hue-rotate(360deg); }
     }
+
+    /* 3) glimmer extended to 8s for softer pulses */
     @keyframes glimmer {
-      0%   { box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-      50%  { box-shadow: 0 0 25px rgba(255,255,255,0.7); }
-      100% { box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+      0%   { box-shadow: 0 0 15px rgba(255,255,255,0.2); }
+      50%  { box-shadow: 0 0 25px rgba(255,255,255,0.5); }
+      100% { box-shadow: 0 0 15px rgba(255,255,255,0.2); }
     }
+
+    /* 
+      4) flickerGlitch with reduced brightness changes:
+         - min brightness around ~0.8
+         - max around ~1.15
+         - also slowed to 3s 
+    */
     @keyframes flickerGlitch {
-      0%   { filter: brightness(0.8) contrast(1); }
-      20%  { filter: brightness(0.4) contrast(2) saturate(1.8); }
-      40%  { filter: brightness(1)   contrast(1.2); }
-      60%  { filter: brightness(1.3) hue-rotate(20deg); }
-      80%  { filter: brightness(0.6) contrast(0.8) saturate(0.8); }
-      100% { filter: brightness(0.8) contrast(1); }
+      0%   { filter: brightness(0.9) contrast(1); }
+      20%  { filter: brightness(0.8) contrast(1.1) saturate(1.05); }
+      40%  { filter: brightness(1.1) contrast(1.1); }
+      60%  { filter: brightness(1.15) hue-rotate(15deg); }
+      80%  { filter: brightness(0.85) contrast(0.9) saturate(0.9); }
+      100% { filter: brightness(0.9) contrast(1); }
     }
+
+    /* The rotating dashed outline inside the squares (optional) */
     .digit span::before {
       content: "";
       position: absolute;
@@ -169,13 +214,14 @@
       border-radius: 12px;
       animation: rotateBorder 4s linear infinite;
       opacity: 0.25;
+      pointer-events: none;
     }
     @keyframes rotateBorder {
       0%   { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
 
-    /* --- Pulsing ring around digit --- */
+    /* Pulsing ring around digit */
     .digit::before {
       content: "";
       position: absolute;
@@ -190,11 +236,11 @@
     }
     @keyframes pulseRing {
       0%   { transform: translate(-50%, -50%) scale(0.3); opacity: 0.5; }
-      50%  { transform: translate(-50%, -50%) scale(1);   opacity: 0; }
+      50%  { transform: translate(-50%, -50%) scale(1);   opacity: 0;   }
       100% { transform: translate(-50%, -50%) scale(0.3); opacity: 0.5; }
     }
 
-    /* Click ring expansion when pressed */
+    /* Click ring expansion on tap/click */
     .digit:active::before {
       animation: none;
     }
@@ -215,7 +261,7 @@
       }
     }
 
-    /* Unique border colors per digit */
+    /* Unique outline colors (start color) for each digit */
     :root {
       --c1: #3369E8;
       --c2: #34A853;
@@ -224,14 +270,14 @@
       --c5: #7E7E7E;
       --c6: #FF4081;
     }
-    .digit:nth-child(1) span { border-color: var(--c1); animation-delay: 0s;   }
-    .digit:nth-child(2) span { border-color: var(--c2); animation-delay: 0.2s;}
-    .digit:nth-child(3) span { border-color: var(--c3); animation-delay: 0.4s;}
-    .digit:nth-child(4) span { border-color: var(--c4); animation-delay: 0.6s;}
-    .digit:nth-child(5) span { border-color: var(--c5); animation-delay: 0.8s;}
-    .digit:nth-child(6) span { border-color: var(--c6); animation-delay: 1s;  }
+    .digit:nth-child(1) span { border-color: var(--c1); }
+    .digit:nth-child(2) span { border-color: var(--c2); }
+    .digit:nth-child(3) span { border-color: var(--c3); }
+    .digit:nth-child(4) span { border-color: var(--c4); }
+    .digit:nth-child(5) span { border-color: var(--c5); }
+    .digit:nth-child(6) span { border-color: var(--c6); }
 
-    /* --- SIMPLIFIED SUBTEXT --- */
+    /* =========== SIMPLIFIED SUBTEXT =========== */
     .subtext {
       margin-top: 1rem;
       font-size: 1.4rem;
@@ -242,15 +288,46 @@
       line-height: 1.4;
       opacity: 0;
       animation: subtextFadeIn 1.5s forwards ease;
-      /* Subtle gradient fill & drop shadow for a refined look */
       background: linear-gradient(90deg, #bbb, #fff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-shadow: 0 0 3px rgba(0,0,0,0.5);
+      box-sizing: border-box;
     }
     @keyframes subtextFadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0);   }
+    }
+
+    /* =========== RESPONSIVE MEDIA QUERIES =========== */
+    @media screen and (max-width: 768px) {
+      .text {
+        font-size: 3rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .digit span {
+        width: 1em;
+        height: 1.3em;
+        border: 4px solid #fff;
+      }
+      .subtext {
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+      }
+    }
+    @media screen and (max-width: 480px) {
+      .text {
+        font-size: 2.5rem;
+      }
+      .digit span {
+        width: 0.8em;
+        height: 1.1em;
+        border: 3px solid #fff;
+      }
+      .subtext {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
@@ -354,7 +431,7 @@
     }
   </style>
 
-  <!-- MAIN CONTENT (No reflection) -->
+  <!-- MAIN CONTENT -->
   <div class="container">
     <!-- Digits -->
     <div class="text">
@@ -368,17 +445,12 @@
 
     <!-- Clean subtext -->
     <div class="subtext">
-      (Celebrating 100k QR Scans—Connecting Communities in NYC and Charlotte!)
+      (Celebrating 100k QR Scans—Connecting Communities in NYC x CLT!)
     </div>
   </div>
 
   <script>
-    /* 
-      1) We have a single canvas (backgroundCanvas) for both the starfield and confetti.
-      2) We'll maintain two arrays: 'stars' and 'confettiPieces'.
-      3) We'll draw them in sequence: fill background -> draw stars -> draw confetti -> requestAnimationFrame.
-    */
-
+    /* =========== STARFIELD + CONFETTI =========== */
     const canvas  = document.getElementById('backgroundCanvas');
     const ctx     = canvas.getContext('2d');
 
@@ -387,9 +459,10 @@
     let confettiPieces = [];
 
     /* Starfield Config */
-    const numStars = 100; // fewer for better performance with confetti
+    const numStars = 80; /* fewer for performance with confetti */
+
     /* Confetti Config */
-    const numConfetti = 60;
+    const numConfetti = 50;
     const confettiColors = [
       "#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF", "#B983FF",
       "#F72585", "#FF9F1C", "#FDFFB6", "#CAFFBF", "#9BF6FF"
@@ -413,7 +486,7 @@
       }
     }
 
-    /* Subtle confetti initialization */
+    /* Confetti initialization */
     function initConfetti() {
       confettiPieces = [];
       for (let i = 0; i < numConfetti; i++) {
@@ -421,11 +494,11 @@
         confettiPieces.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          size: 5 + Math.random() * 8,         // size of confetti
+          size: 5 + Math.random() * 8,
           color: color,
-          angle: Math.random() * 2 * Math.PI,  // rotation
-          speedX: -1 + Math.random() * 2,      // horizontal velocity
-          speedY: 0.5 + Math.random() * 1.5,   // vertical velocity
+          angle: Math.random() * 2 * Math.PI,
+          speedX: -1 + Math.random() * 2,
+          speedY: 0.5 + Math.random() * 1.5,
           rotationSpeed: -0.02 + (Math.random() * 0.04)
         });
       }
@@ -439,7 +512,7 @@
 
       // Draw stars
       stars.forEach(star => {
-        // Twinkle
+        // Twinkle (slightly)
         star.alpha += star.speed * (Math.random() > 0.5 ? 1 : -1);
         if (star.alpha < 0) star.alpha = 0.2;
         if (star.alpha > 1) star.alpha = 1;
